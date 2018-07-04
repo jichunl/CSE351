@@ -128,8 +128,9 @@ NOTES:
  *   Rating: 1
  */
 int bitAnd(int x, int y) {
-	/* De Morgan's law */
-	return ~((~x)|(~y));
+	// De Morgan's law
+	// ~(A*B) = ~A + ~B 
+	return ~(~x | ~y);
 }
 /*
  * bitXor - x^y using only ~ and &
@@ -142,8 +143,8 @@ int bitXor(int x, int y) {
 	// A | B = ~((~A) & (~B)) De Morgan's Law
 	// C ^ D = C & (~D) | (~C) & D  
 	// let x replace C, y replace D and use DeMorgan's Law
-	// 
-	return ~((~A) & (~B))
+	// x ^ y = x & (~y) | (~x) & y = ~((~(x & (~y)))) & (~((~x) & y)))
+	return ~(~(x & ~y) & ~(~x & y));
 }
 /*
  * thirdBits - return 32-bit quantity with every third bit
@@ -158,8 +159,15 @@ int bitXor(int x, int y) {
  *   Rating: 1
  */
 int thirdBits(void) {
-	//
+	// shift the original 0x01 to get a pattern of 0x1001
+	// replicate this pattern to obtain the whole 32 bit number
+	// shift every number by the length + 2 and xor with original number
 	int i = 0x1;
+	int a = (i << 3) ^ i;
+	int b = (a << 6) ^ a;
+	int c = (b << 12) ^ b;
+	int d = (c << 24) ^ c;
+ 	return d;
 }
 // Rating: 2
 /*
