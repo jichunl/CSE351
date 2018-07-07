@@ -180,7 +180,13 @@ int thirdBits(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-  return 2;
+	// If x could be fit in n bit, then shift this number to left by 32-n
+	// bit then shift back would give the original number back. 
+	int shift_size = 32 + ~n;
+	int x_shift = x << shift_size;
+	x_shift = x_shift >> shift_size;
+	return !(x ^ x_shift);
+	
 }
 /*
  * sign - return 1 if positive, 0 if zero, and -1 if negative
@@ -191,7 +197,15 @@ int fitsBits(int x, int n) {
  *  Rating: 2
  */
 int sign(int x) {
-  return 2;
+	// First left shift 31 bits to see most significant bit, 1: negative,
+	// 0: zero or positive. Since we are using signed value, shift will be
+	// arithmetic shifts. If the number is negative, it will end up being
+	// 32 bit ones. If the number is non negative, it will end up being 0.
+	// The double not part handles the zero case. If the number is non-zero,
+	// it would return 1 otherwise zero. 32 bit ones OR with 1 would still
+	// be 32 bit ones, which is -1. Zero OR with zero would be 0. One OR 
+	// with one would give 1.
+	return (x >> 31) | (!!x);
 }
 /*
  * getByte - Extract byte n from int x
@@ -202,7 +216,10 @@ int sign(int x) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-  return 2;
+	// Right shift n by 3 to get the bits we wanna shift
+	// Shift x then mask with 0xFF to keep the bits we need
+	int n_bits = n << 3;
+	return (x >> n_bits) & 0xFF;
 }
 // Rating: 3
 /*
@@ -214,7 +231,14 @@ int getByte(int x, int n) {
  *   Rating: 3
  */
 int logicalShift(int x, int n) {
-  return 2;
+	// To get a logical shift we will need to set the leading none-zero
+	// bits created by arithmetic shifts to zero. This will be achieved
+	// by bit-wise AND with the arithmetic result 
+	int mask = 0x7F;
+	mask = (mask << 8) + 0xFF;
+	mask = (mask << 8) + 0xFF;
+	mask = (mask << 8) + 0xFF;
+	return (x >> n) & (((mask >> n) << 1) + 1);
 }
 /*
  * addOK - Determine if can compute x+y without overflow
@@ -225,7 +249,12 @@ int logicalShift(int x, int n) {
  *   Rating: 3
  */
 int addOK(int x, int y) {
-  return 2;
+	// Overflow happens if operands have same sign and result's sign is
+	// different
+	int sign_x = x >> 31;
+	int sign_y = y >> 31;
+	int sign_ sum = (x + y) >> 31;
+	return !(~(sign_x ^ sign_y) & (sign_x ^ sign_sum));
 }
 /*
  * invert - Return x with the n bits that begin at position p inverted
@@ -240,7 +269,7 @@ int addOK(int x, int y) {
  *   Rating: 3
  */
 int invert(int x, int p, int n) {
-  return 2;
+  	return x ^ (~(~0U<< n) << p);
 }
 // Rating: 4
 /*
@@ -251,7 +280,8 @@ int invert(int x, int p, int n) {
  *   Rating: 4
  */
 int bang(int x) {
-  return 2;
+	int x_comp = ~x + 1;
+	return ((~x & ~x_comp) >> 31) & 0x1;
 }
 // Extra Credit: Rating: 4
 /*
@@ -263,6 +293,9 @@ int bang(int x) {
  *   Rating: 4
  */
 int isPower2(int x) {
-  return 2;
+  	int neg_one = ~0;
+	int sign = x >> 31;
+	int temp = sign ^ neg_one;
+	return !((x & (x + minus)) + !x);
 }
 
