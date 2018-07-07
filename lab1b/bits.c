@@ -182,7 +182,7 @@ int thirdBits(void) {
 int fitsBits(int x, int n) {
 	// If x could be fit in n bit, then shift this number to left by 32-n
 	// bit then shift back would give the original number back. 
-	int shift_size = 32 + ~n;
+	int shift_size = 32 + ~n + 1;
 	int x_shift = x << shift_size;
 	x_shift = x_shift >> shift_size;
 	return !(x ^ x_shift);
@@ -253,7 +253,7 @@ int addOK(int x, int y) {
 	// different
 	int sign_x = x >> 31;
 	int sign_y = y >> 31;
-	int sign_ sum = (x + y) >> 31;
+	int sign_sum = (x + y) >> 31;
 	return !(~(sign_x ^ sign_y) & (sign_x ^ sign_sum));
 }
 /*
@@ -296,6 +296,6 @@ int isPower2(int x) {
   	int neg_one = ~0;
 	int sign = x >> 31;
 	int temp = sign ^ neg_one;
-	return !((x & (x + minus)) + !x);
+	return !((x & (x + temp)) + !x);
 }
 

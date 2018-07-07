@@ -13,6 +13,12 @@ ID:   	1531264
 3) Explain:
 	Different types of variable y could result in diff-
 erent interpretations for y = -1 and y = 0xFFFFFFFFF. If y 
-is a signed integer, y = -1 and y = 0xFFFFFFFF would have
-no difference. 0xFFFFFFFF is simply 32 bit 1s in binary.  
+is a signed integer in 32 bit system, y = -1 and y =
+0xFFFFFFFF would have no difference. 0xFFFFFFFF is simply 
+32 bit 1s in binary. However, if y is a pointer, then y = 
+-1 and y = 0xFFFFFFFF would be different address. y = -1 
+would assign memory location 0xFFFFFFFFFFFFFFFF to pointer,
+and y = 0xFFFFFFFF would just assign pointer y memeory location
+0xFFFFFFFF, which is a different memory location from 
+0xFFFFFFFFFFFFFFFF.
 -----------------------------------------------------------
