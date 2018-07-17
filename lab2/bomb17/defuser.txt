@@ -1,3 +1,6 @@
 Oh, play it cool. Play it cool. Here come the space cops.
 0 5 10 15 20 25
- 
+0 o 667
+15
+mpmeka
+2 6 4 3 5 1

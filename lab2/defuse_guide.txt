@@ -1,0 +1,99 @@
+phase_3:
+	1. Call sscanf, if input string arguments less than or equal to 2, bomb explodes
+	2. The required format of the input string is %d %c %d
+	3. After step over first explode_bomb call, the value of %rsp will be 0x7ffffffee370
+	4. The value stored at 0x7ffffffee37c is the first argument of the input string
+	5. The first int will be compared with 0x7, if it is greater than 7, bomb explodes
+	6. If the value less than 0x7, copy that value into %eax
+	7. After jmp, copy 0x6f to %eax
+	8. Then compare 0x29b with 0x8(%rsp), at this moment, the value stored in %rsp is 
+		0x7ffffffee370, so the memory address we will be looking at is 0x7ffffffee378,
+		and the value is third argument of the input string. If the values are not equal,
+		the bomb explodes.
+	9. If equal, then jump to <phase_3+317>, which cmp 0x7(%rsp) with %al, if equal, then
+		terminates the current function call
+	10. The address 0x7(%rsp) is 0x7ffffffee377, the value at this address is the second
+		argument of input string
+	11. %al is the lowest byte of %rax, which is 0x6f, 111 in decimal, the char corresponding
+		to 111 is 'o'
+
+phase_4:
+	1. The input string for phase_4 is a number, and there should only be one argument
+	2. Then cmp 0 with 0xc(%rsp), the value at rsp is the 0x7ffffffee370, so the value at 
+		0x7ffffffee37c is the input value
+	3. If the value is greater taht 0, then jump to <phase_4+41>, which moves this value
+		to %edi
+	4. Then step into func4
+	5. First mov 0x1 to %eax, then cmp 0x1 with %edi, if %eax is less than or equal to 1,
+		jump to return
+	6. If returned, compare 0x3db with %eax, if equal terminate phase_4
+	7. If not returned, mov current %edi to %ebx, then store %rdi-1 to %edi 
+	8. Then call func4 again, once call complete, mov returned value in %eax to %ebp
+	9. Then store %rbx-2 to %edi and call func4 again
+	10. The return value of func4 should be 987, value should be 15.
+	// java version to find value is Test.java
+	// x -> %edi, y -> %eax, z -> %ebx
+	int func4(int x) {
+		if (x <= 1) {
+			y = 1;
+			return y;
+		} else {
+			z = x;
+			return func4(x-1) + func4(x-2);
+		}
+	}
+
+phase_5:
+	1. mov input %rdi to %rbx
+	2. call string_length
+		3. Inside string_length, if empty, return 0. 
+		4. If not empty, mov 0 to eax
+		5. add 1 to %rdi
+		6. add 1 t0 %eax
+		7. compare the next char inside the input string if it is null
+		8. if not keep repeating 5, 6, otherwise return
+	9. cmp returned value with 6, if not equal, bomb explodes
+	10. if equal, mov 0 to %eax
+	11. then mov value at (%rbx,%rax,1) to %edx, which is the first char from the input string
+	12. and 0xf with %edx and store it into %edx
+	13. mov 0x401c00(%rdx) to %edx
+	14. load lowest byte to (%rsp, %rax, 1)
+	15. add 1 to %rax, if %rax is less than 6, repeat step 11-15
+	16. call string_not_equal, string that will be compared with input is "titans"
+	17. The value of %rdx should be in step 13 that will end up with titans is 
+		d, 0, d, 5, b, 1, the char end with d, 0, d, 5, b, 1 are m, p, m, e, k, a
+
+phase_6:
+	1. cal 0x30 + %rsp value and store in %rsi, current %rsp value is 0x7ffffffee310
+	2. then read in 6 numbers
+	3. cal 0x30 + %rsp and store in %r12, the currebt %rsp value is 0x7ffffffee310
+	4. mov 0 to %r13d
+	5. mov %r12 to %rbp
+	6. mov (%r12) to %eax, the value should be the first number of the input string
+	7. subtract 1 from %eax and then cmp with 5
+	8. if %eax is below or equal to 5, bomb will not explode
+	9. add 1 to %r13d
+	10. cmp with 6
+	11. if %r13d is equal to 6, jump to <phase_6+122>, otherwise mov %r13d to %ebx
+	12. mov %ebx to %rax
+	13. mov 0x30(%rsp, %rax, 4) to %eax, the current value of %rsp is 0x7ffffffee310,
+		so the address will be 0x7ffffffee344, and the value at this address is second
+		argument of the input string
+	14. cmp %eax with %rbp, the current %rpb value is 0x7ffffffee340
+	15. if equal, bomb explodes
+	16. then add 1 to %ebx
+	17. cmp with 5, if %ebx less than 5, back to step 12
+	18. after %ebx == 6, add 4 to %r12	
+	19. jmp to step 5
+	20. after jump to <phase_6+122>, mov 0 to %esi
+	21. then mov first argument of the input string to %ecx
+	22. mov 1 to info %eax
+	23. mov 0x603300 to %edx
+	24. cmp 1 with %ecx, if %ecx greater than 1, jump <phase_+106>
+	25. after jump to phase_6+106, mov %rdx to (%rsp, %rsi, 1), current value at %rsp is 0x7ffffffee310,
+		
+	Ok here is what phase 6 is doing: take in 6 numbers, these number should be 1, 2, 3, 4, 5, 6 but not
+	in that order particularly, in the disassembly you could see a particular address 0x603300 mov to %edx
+	which is the beginning of some linked list. The contents of linked list are 6 numbers, for me it is 417,
+	944, 726, 738, 655, 783 from address 0x603300 to 0x603350 in that order. The input string should place six
+	numbers from largest to smallest by address numbers using index. In my case it is 2 6 4 3 5 1.
