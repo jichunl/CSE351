@@ -1,24 +1,24 @@
 ********************
 * Lab 2 Reflection *
 ********************
-Name: Jichun Li
-ID:   1531264
+Name:	Jichun Li
+ID: 1531264
 
 
 -----------------------------------------------------------
-1) &value:  0x7fffffffd92c
-   &array:  0x7fffffffd930
+1) The address of array is stored in address 0x7fffffffd930
+   The address of value is stored in address 0x7fffffffd92c
 -----------------------------------------------------------
-2) Replacement Instruction:  lea 0x10(%rsp), %rax 
+2) The equivalent instrcution is lea 0x10(%rsp), %rax 
 -----------------------------------------------------------
-3) Start instr 1:  mov -0x4(%rbp), %eax
-   - Reason:  
+3) The two instructions this loop that could be considered
+   as the start of this calculation are 
+	mov -0x4(%rbp), %eax
+	lea (%rdx, %rax, 1), %rcx
    The first instruction is loading the current index value
    to %eax, which will be used later as the index register
    to calculate the address where the result of calculation
    will be stored.
-   Start instr 2:  lea (%rdx, %rax, 1), %rcx
-   - Reason:   
    The second instruction is calculating the address of the
    elements inside the array that will be changed and store
    the address to %rcx.
