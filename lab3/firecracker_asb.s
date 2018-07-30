@@ -1,4 +1,4 @@
-movq $0x6117a1ab, 
-movq $0x775c915e, %rsi
+movq 0x602320, %rdx
+movq %rdx, 0x602308
 pushq $0x401020
 ret
