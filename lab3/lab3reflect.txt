@@ -1,24 +1,35 @@
 ********************
 * Lab 3 Reflection *
 ********************
-Name: 
-ID:   
+Name:	Jichun Li 
+ID:   	1531264
 
 
 -----------------------------------------------------------
-1) Instruction 1: <?? + ##>
-   Purpose:       
-
-   Instruction 2: <?? + ##>
-   Purpose:       
+1) Instruction 1: <fillArray + 4>
+   Purpose:	passing in the starting address of the array
+		and store it at -0x18(%rbp)
+   Instruction 2: <fillArray + 8>
+   Purpose:     passing in the end address of the array and
+		store it at -0x1c(%rbp)
 -----------------------------------------------------------
 2) Explain:  
-
-
-
+	The segmentation fault is caused by returning to an
+	illegal address. The value that is corrupted is the
+	return address of function part2. The assembly 
+	instruction that cause the segmentation fault is ret.
 -----------------------------------------------------------
 3) Explain:  
-
-
-
+	The stack is for static memory allocation and the 
+	heap is for dynamic memory allocation. For stack we 
+	need to kniw how much data we need to allocate; for
+	heap we do not. We can allocate a block at any time
+	and free it at anytime. The segmentation fault is 
+	caused by attempt on accessing illegal memory 
+	location. For heap even though we have more freedom
+	on allocate memory but since the total size of memory
+	is limited, if the heap grows too large it can still
+	overwrite other chunks of memory and causing a 
+	segmentaion fault. So the it will not remove the 
+	possibility of segmentation fault.
 -----------------------------------------------------------
