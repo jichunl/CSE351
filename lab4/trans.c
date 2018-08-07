@@ -22,7 +22,74 @@ int is_transpose(int M, int N, int A[M][N], int B[N][M]);
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[M][N], int B[N][M])
 {
-
+	// Assume M and N are positive
+	int i, j, row, col, size, temp, diag, isDiag;
+	
+	// 32x32
+	if(M == 32 && N == 32) {
+		size = 8;
+		for(row = 0; row < N; row += size) {
+			for(col = 0; col < M; col += size) {
+				for(i = row; i < row + size; i++) {
+					for(j = col; j < col + size; j++) {
+						if(i == j) {
+							temp = A[i][j];
+							diag = i;
+							isDiag = 1;
+						} else {
+							B[j][i] = A[i][j];
+						}
+					}
+					if(isDiag == 1) {
+						B[diag][diag] = temp;
+	   	  	  	  		isDiag = 0;
+					}
+				}
+			}
+		}
+	}
+        
+	// 64x64 case
+	if(M == 64 && N == 64) {
+		size = 4;
+		for(row = 0; row < M; row += size) {
+			for(col = 0; col < N; col += size) {
+				for(i = row; i < row + size; i++) {
+					for(j = col; j < col + size; j++) {
+						if(i == j) {
+							temp = A[i][j];
+							diag = i;
+							isDiag = 1;
+						} else {
+							B[j][i] = A[i][j];
+						}
+					}
+					if(isDiag == 1) {
+						B[diag][diag] = temp;
+						isDiag = 0;
+					}
+				}
+			}
+		}
+	}
+	
+	// 67x61 case
+	if(M == 67 && N == 61) {
+		size = 14;
+		for(row = 0; row < M; row += size) {
+			for(col = 0; col < N; col += size) {
+				for(i = row; (i < row + size) && (i < M); i++) {
+					for(j = col; (j < col + size) && (j < N); j++) {
+						if(i > 66 || j > 60) {
+							continue;
+						} else {
+							A[i][j] = B[j][i];
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 /* 

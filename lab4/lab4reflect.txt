@@ -1,0 +1,28 @@
+********************
+* Lab 4 Reflection *
+********************
+Name:	Jichun Li 
+ID:   	1531264
+
+
+-----------------------------------------------------------
+1) Instructions in the nested loops that access memory
+   lab0.d:    <#> 17
+   lab0opt.d: <#> 1
+-----------------------------------------------------------
+2) Where are the loop variables stored in lab0.d:
+   i: -0x4(%rbp)
+   j: -0x8(%rbp)
+   k: -0xc(%rbp)
+-----------------------------------------------------------
+3) Corresponding values in lab0opt.d:
+   %edx: index of for loop
+   %rcx: location that the value of the index will be stored
+-----------------------------------------------------------
+4) Execution time
+
+   Pro:  The optimization decrease the execution time 
+   	as it has less memory access
+   Con:  The optimization increased the space complexity
+   
+-----------------------------------------------------------
