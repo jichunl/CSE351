@@ -1,0 +1,24 @@
+********************
+* Lab 5 Reflection *
+********************
+Name:	Jichun Li 
+ID:     1531264
+
+
+-----------------------------------------------------------
+1) Alignment:  8 bytes
+-----------------------------------------------------------
+2) Boundary Tag Size: 8 bytes 
+   Reasoning:	The pointer returned by new malloced block 
+		starts with 0x603010. We notice that there
+		is 0x20 at 0x603008 indicating the header.
+		Similarly, when we have the next pointer at
+		0x603030, the header is 0x603028. So the 
+		boundary tag is 8 bytes.
+-----------------------------------------------------------
+3) Footer?  NO
+   Explain: The position where the footer should be contains
+	    no valid data or information, i.e. 0x00000000.
+   
+
+-----------------------------------------------------------
